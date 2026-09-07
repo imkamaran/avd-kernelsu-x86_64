@@ -105,20 +105,19 @@
 
 由於 Bazel/Kleaf 採用隔離的沙盒進行編譯，**不能**直接使用 `setup.sh` 預設產生的跨目錄軟連結。必須在執行 `setup.sh` 後，將 KernelSU / KernelSU-Next 的原始碼與 UAPI 檔案以**實體目錄**形式複製到 `common/` 中。
 
-目前的版本策略是：**A13/A14 預設使用 KernelSU v3.1.0**，**A15/A16 預設使用 KernelSU v3.2.0**。A13/A14 的 GKI 還在使用 syscall table，v3.1.0 是比較單純的 baseline；A15+ 的 GKI 已改成 switch-case syscall hardening，手動編譯時要搭配第三章把 hardening patch 編進 kernel，並把 `syscall_hardening` 預設改成 `off`。
+目前的版本策略是：所有 AVD target 預設使用最新穩定版 KernelSU **v3.3.0**。A13/A14 的 GKI 還在使用 syscall table；A15+ 的 GKI 已改成 switch-case syscall hardening，手動編譯時要搭配第三章把 hardening patch 編進 kernel，並把 `syscall_hardening` 預設改成 `off`。
 
 以下流程同時支援官方 KernelSU 和 KernelSU-Next。請先選擇 variant 與版本：
 
 ```bash
 # 官方 KernelSU 範例：
 KSU_VARIANT=KernelSU
-# A13/A14 使用 v3.1.0；A15/A16 使用 v3.2.0。
-# KSU_REF=v3.1.0
-KSU_REF=v3.2.0
+# 所有 AVD target 預設使用最新穩定版 v3.3.0。
+KSU_REF=v3.3.0
 
 # 如果要改用 KernelSU-Next，切換 variant，版本仍依照同樣策略選擇。
 # KSU_VARIANT=KernelSU-Next
-# KSU_REF=v3.2.0
+# KSU_REF=v3.3.0
 ```
 
 1. **複製/下載 KernelSU 原始碼**：
@@ -220,7 +219,7 @@ KSU_REF=v3.2.0
 
 ## **(KernelSU v3.2.0+ ONLY)** 三、 套用 x86_64 Syscall Hardening 與 KernelSU 相容修正
 
-這一章只針對 **KernelSU v3.2.0（含）之後**。A15/A16 預設走這條路徑；A13/A14 預設仍使用 v3.1.0，所以通常可以跳過本章。只有在你明確要把 v3.2.0+ 套到 A13/A14 時，才需要看 older GKI 的 bypass 做法。
+這一章只針對 **KernelSU v3.2.0（含）之後**。目前 v3.3.0 是所有 AVD target 的預設版本，因此 A15/A16 直接走這條路徑；A13/A14 則需要看後面的 older GKI bypass 做法。
 
 從 v3.2.0 開始，KernelSU 的 x86_64 syscall hook 會檢查 kernel 是否提供 `X86_FEATURE_INDIRECT_SAFE`。A15+ GKI 需要保留這個檢查並套用 kernel patch；A13/A14 的舊 syscall table GKI 則沒有這個 hardening 特徵，若硬要使用 v3.2.0+，才需要移除 KernelSU 端的檢查。
 
@@ -367,7 +366,7 @@ cd ..
 
 <details>
 
-適用 `common-android13-5.15` 和 `common-android14-6.1`。這類 kernel 沒有新版 switch-case syscall hardening，不需要套 `X86_FEATURE_INDIRECT_SAFE` kernel patch。使用預設的 v3.1.0（含）以下時也不需要修改這裡；只有使用 KernelSU v3.2.0+ 時，才在整合 KernelSU 之後把 KernelSU 端的檢查註解或移除。
+適用 `common-android13-5.15` 和 `common-android14-6.1`。這類 kernel 沒有新版 switch-case syscall hardening，不需要套 `X86_FEATURE_INDIRECT_SAFE` kernel patch。使用 KernelSU v3.2.0+（包含目前預設的 v3.3.0）時，才在整合 KernelSU 之後把 KernelSU 端的檢查註解或移除；v3.1.0（含）以下則不需要修改這裡。
 
 編輯 `common/drivers/kernelsu/core/init.c`（部分版本在 `common/drivers/kernelsu/ksu.c`）。
 

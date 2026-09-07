@@ -8,7 +8,7 @@
       "android_label": "A13",
       "api_level": "33",
       "kernel_version": "5.15",
-      "default_ksu_version": "v3.1.0",
+      "default_ksu_version": "v3.3.0",
       "release_ksu_v32_plus": false
     },
     {
@@ -19,7 +19,7 @@
       "android_label": "A14",
       "api_level": "34",
       "kernel_version": "6.1",
-      "default_ksu_version": "v3.1.0",
+      "default_ksu_version": "v3.3.0",
       "release_ksu_v32_plus": false
     },
     {
@@ -30,7 +30,7 @@
       "android_label": "A15",
       "api_level": "35",
       "kernel_version": "6.6",
-      "default_ksu_version": "v3.2.0",
+      "default_ksu_version": "v3.3.0",
       "release_ksu_v32_plus": true
     },
     {
@@ -41,7 +41,7 @@
       "android_label": "A16",
       "api_level": "36.0",
       "kernel_version": "6.6",
-      "default_ksu_version": "v3.2.0",
+      "default_ksu_version": "v3.3.0",
       "release_ksu_v32_plus": true
     },
     {
@@ -52,7 +52,7 @@
       "android_label": "A16",
       "api_level": "36.1",
       "kernel_version": "6.12",
-      "default_ksu_version": "v3.2.0",
+      "default_ksu_version": "v3.3.0",
       "release_ksu_v32_plus": true
     }
   ]
